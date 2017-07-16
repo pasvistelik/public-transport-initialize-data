@@ -1,9 +1,13 @@
 {
   "name": "public-transport-initialize-data",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Module for initializing the public-transport app.",
-  "main": "initialize.js",
+  "main": "lib/initialize.js",
   "scripts": {
+    "build": "babel src --out-dir lib",
+    "preinstall": "npm run build",
+    "prebuild": "rm -rf lib/",
+    "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/pasvistelik/public-transport-initialize-data/issues"
   },
-  "homepage": "https://github.com/pasvistelik/public-transport-initialize-data#readme"
+  "homepage": "https://github.com/pasvistelik/public-transport-initialize-data#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.4.0"
+  }
 }
