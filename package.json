@@ -1,0 +1,23 @@
+{
+  "name": "public-transport-initialize-data",
+  "version": "1.0.0",
+  "description": "Module for initializing the public-transport app.",
+  "main": "initialize.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pasvistelik/public-transport-initialize-data.git"
+  },
+  "keywords": [
+    "public-transport",
+    "initializing-module"
+  ],
+  "author": "Andrey Pasvistelik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pasvistelik/public-transport-initialize-data/issues"
+  },
+  "homepage": "https://github.com/pasvistelik/public-transport-initialize-data#readme"
+}
