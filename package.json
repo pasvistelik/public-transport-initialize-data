@@ -1,12 +1,11 @@
 {
   "name": "public-transport-initialize-data",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Module for initializing the public-transport app.",
   "main": "lib/initialize.js",
   "scripts": {
     "build": "babel src --out-dir lib",
     "preinstall": "npm run build",
-    "prebuild": "rm -rf lib/",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
