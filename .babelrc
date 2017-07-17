@@ -8,5 +8,5 @@
       }
     }]
   ],
-  "plugins": ["transform-class-properties", "babel-polyfill"]
+  "plugins": ["transform-class-properties", "babel-polyfill", "babel-plugin-transform-runtime"]
 }

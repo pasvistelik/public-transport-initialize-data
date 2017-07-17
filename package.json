@@ -1,6 +1,6 @@
 {
   "name": "public-transport-initialize-data",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Module for initializing the public-transport app.",
   "main": "lib/initialize.js",
   "scripts": {
@@ -28,6 +28,7 @@
     "babel-preset-env": "^1.4.0",
     "babel-preset-es2015": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.23.0"
   }
 }
