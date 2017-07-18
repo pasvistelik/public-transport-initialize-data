@@ -4,7 +4,7 @@
   "description": "Module for initializing the public-transport app.",
   "main": "lib/initialize.js",
   "scripts": {
-    "build": "babel src --out-dir lib",
+    "build": "npm update && babel src --out-dir lib",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
