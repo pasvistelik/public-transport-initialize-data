@@ -171,13 +171,13 @@ function initialize(allStations, allRoutes, allTimetables) {
                 if (currentRouteStationsCodes[index] == null || currentRouteStationsCodes[index].length === 0) continue;
                 for (let j = 0, m = currentRouteStationsCodes[index].length, stationCode = currentRouteStationsCodes[index][0]; j < m; stationCode = currentRouteStationsCodes[index][++j]) {
                     var tmpUsed = false;
-                    for (let k = 0, mn = tmpUsedStations.length, station = tmpUsedStations[0]; k < mn; station = tmpUsedStations[++k]) {
+                    /*for (let k = 0, mn = tmpUsedStations.length, station = tmpUsedStations[0]; k < mn; station = tmpUsedStations[++k]) {
                         if (station != null && station.hashcode === stationCode) {
                             bindRoutesStationsTimetables(station, tmpArr, tabArr, currentRoute);
                             tmpUsed = true;
                             break;
                         }
-                    }
+                    }*/
                     if (!tmpUsed) {
                         for (let k = 0, mn = allStations.length, station = allStations[0]; k < mn; station = allStations[++k]) {
                             if (station != null && station.hashcode === stationCode) {
