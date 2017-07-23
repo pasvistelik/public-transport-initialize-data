@@ -46,14 +46,21 @@ function findTimeAfter(time) {
     
     for (let kkk = 0, mnkk = this.table.length, t = this.table[0]; kkk < mnkk; t = this.table[++kkk]) {
         if (t.days.includes(day)) {
-
+            /*
             //TODO: Здесь можно ускорить поиск, поскольку массив t.times отсортирован по возрастанию.
             for (let iik = 0, mnii = t.times.length, st = t.times[0], stTime; iik < mnii; st = t.times[++iik]) {
                 stTime = st.hour * 3600 + st.minute * 60;
                 if (stTime >= time) {
                     return stTime - time;
                 }
-            }
+            }*/
+            let findedTime = binomialFind(t.times, function(array, item, index){
+                let stTime = this.hour * 3600 + this.minute * 60;
+                if (stTime >= time && (array[index + 1] == null || array[index].hour * 3600 + array[index].minute * 60 < time)) return 0;
+                else if (stTime >= time) return 1;
+                else return -1;
+            });
+            if (findedTime != null) return findedTime.hour * 3600 + findedTime.minute * 60 - time;
 
             /*do {
                 dateTmp = new Date();
@@ -62,7 +69,7 @@ function findTimeAfter(time) {
             } while (t.days.includes(day));*/
             
             //TODO: Здесь следует перейти к расписанию следующего дня и искать там.
-            if (t.times.length !== 0) return t.times[0].hour * 3600 + t.times[0].minute * 60 + 86400;
+            if (t.times.length !== 0) return t.times[0].hour * 3600 + t.times[0].minute * 60 + 86400 - time;
             break;
         }
     }
@@ -86,11 +93,27 @@ function findTimeBefore(time) {
             }
 
             //TODO: Здесь следует перейти к расписанию предыдущего дня и искать там.
-            if (t.times.length !== 0) return t.times[t.times.length - 1].hour * 3600 + t.times[t.times.length - 1].minute * 60 - 86400;
+            if (t.times.length !== 0) return t.times[t.times.length - 1].hour * 3600 + t.times[t.times.length - 1].minute * 60 - 86400 - time;
             break;
         }
     }
     return 0;
+}
+
+function binomialFind(array, predicateForArrayItem) {
+    for (let a = 0, b = array.length, i = parseInt(b/2), currentItem = array[i], predicateResult; a != b; currentItem = array[i = parseInt((b+a)/2)]){
+        predicateResult = currentItem.predicateForArrayItem(array, currentItem, i);
+        if (predicateResult === 0) {
+            return currentItem;
+        }
+        else if (predicateResult === 1) {
+            b = i;
+        }
+        else {
+            a = i;
+        }
+    }
+    return null;
 }
 
 
@@ -164,7 +187,7 @@ function initialize(allStations, allRoutes, allTimetables) {
                             }
                         }*/
 
-                        for (let a = 0, b = allStations.length, i = parseInt(b/2), currentStation = allStations[i]; a != b; currentStation = allStations[i = parseInt((b+a)/2)]){
+                        /*for (let a = 0, b = allStations.length, i = parseInt(b/2), currentStation = allStations[i]; a != b; currentStation = allStations[i = parseInt((b+a)/2)]){
                             if (currentStation.hashcode === stationCode) {
                                 bindRoutesStationsTimetables(currentStation, tmpArr, tabArr, currentRoute);
                                 break;
@@ -175,7 +198,14 @@ function initialize(allStations, allRoutes, allTimetables) {
                             else {
                                 b = i;
                             }
-                        }
+                        }*/
+
+                        let findedStation = binomialFind(allStations, function(){
+                            if (this.hashcode === stationCode) return 0;
+                            else if (this.hashcode > stationCode) return 1;
+                            else return -1;
+                        });
+                        bindRoutesStationsTimetables(findedStation, tmpArr, tabArr, currentRoute);
                     }
                 }
                 currentRoute.stations[index] = tmpArr;
