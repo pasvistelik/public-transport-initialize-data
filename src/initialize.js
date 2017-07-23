@@ -54,7 +54,7 @@ function findTimeAfter(time) {
                     return stTime - time;
                 }
             }*/
-            let findedTime = binomialFind(t.times, function(array, item, index){
+            let findedTime = binaryFind(t.times, function(array, item, index){
                 let stTime = item.hour * 3600 + item.minute * 60;
                 if (stTime >= time && (array[index + 1] == null || array[index + 1].hour * 3600 + array[index + 1].minute * 60 < time)) return 0;
                 else if (stTime >= time) return 1;
@@ -100,18 +100,18 @@ function findTimeBefore(time) {
     return 0;
 }
 
-function binomialFind(array, predicateForArrayItem) {
-    for (let a = 0, b = array.length, i = parseInt(b/2), currentItem = array[i], predicateResult; a != b; currentItem = array[i = parseInt((b+a)/2)]){
-        predicateResult = predicateForArrayItem(array, currentItem, i);
-        if (predicateResult === 0) {
-            return currentItem;
-        }
-        else if (predicateResult === 1) {
-            b = i;
-        }
-        else {
-            a = i;
-        }
+function binaryFind(array, t)
+{
+    var i = 0, j = array.length, k, predicateResult, currentItem; 
+                                 
+    while (i < j){
+        k = Math.floor((i+j)/2);
+        currentItem = array[k];
+        predicateResult = predicateForArrayItem(array, currentItem, k);
+
+        if (predicateResult === 0) return currentItem;
+        else if (predicateResult === 1) j = k;
+        else i = k+1;
     }
     return null;
 }
@@ -200,7 +200,7 @@ function initialize(allStations, allRoutes, allTimetables) {
                             }
                         }*/
 
-                        let findedStation = binomialFind(allStations, function(array, item, index){
+                        let findedStation = binaryFind(allStations, function(array, item, index){
                             if (item.hashcode === stationCode) return 0;
                             else if (item.hashcode > stationCode) return 1;
                             else return -1;
