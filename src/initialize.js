@@ -55,8 +55,8 @@ function findTimeAfter(time) {
                 }
             }*/
             let findedTime = binomialFind(t.times, function(array, item, index){
-                let stTime = this.hour * 3600 + this.minute * 60;
-                if (stTime >= time && (array[index + 1] == null || array[index].hour * 3600 + array[index].minute * 60 < time)) return 0;
+                let stTime = item.hour * 3600 + item.minute * 60;
+                if (stTime >= time && (array[index + 1] == null || array[index + 1].hour * 3600 + array[index + 1].minute * 60 < time)) return 0;
                 else if (stTime >= time) return 1;
                 else return -1;
             });
@@ -102,7 +102,7 @@ function findTimeBefore(time) {
 
 function binomialFind(array, predicateForArrayItem) {
     for (let a = 0, b = array.length, i = parseInt(b/2), currentItem = array[i], predicateResult; a != b; currentItem = array[i = parseInt((b+a)/2)]){
-        predicateResult = currentItem.predicateForArrayItem(array, currentItem, i);
+        predicateResult = predicateForArrayItem(array, currentItem, i);
         if (predicateResult === 0) {
             return currentItem;
         }
@@ -200,9 +200,9 @@ function initialize(allStations, allRoutes, allTimetables) {
                             }
                         }*/
 
-                        let findedStation = binomialFind(allStations, function(){
-                            if (this.hashcode === stationCode) return 0;
-                            else if (this.hashcode > stationCode) return 1;
+                        let findedStation = binomialFind(allStations, function(array, item, index){
+                            if (item.hashcode === stationCode) return 0;
+                            else if (item.hashcode > stationCode) return 1;
                             else return -1;
                         });
                         bindRoutesStationsTimetables(findedStation, tmpArr, tabArr, currentRoute);
