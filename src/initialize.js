@@ -205,7 +205,9 @@ function initialize(allStations, allRoutes, allTimetables) {
                             else if (item.hashcode > stationCode) return 1;
                             else return -1;
                         });
-                        bindRoutesStationsTimetables(findedStation, tmpArr, tabArr, currentRoute);
+                        if (findedStation != null) {
+                            bindRoutesStationsTimetables(findedStation, tmpArr, tabArr, currentRoute);
+                        }
                     }
                 }
                 currentRoute.stations[index] = tmpArr;
