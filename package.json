@@ -1,6 +1,6 @@
 {
   "name": "public-transport-initialize-data",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Module for initializing the public-transport app.",
   "main": "lib/initialize.js",
   "scripts": {
