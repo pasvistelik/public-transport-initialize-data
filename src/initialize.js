@@ -231,7 +231,7 @@ function initialize(allStations, allRoutes, allTimetables) {
     }
 
     console.log("Initialized. Time = " + (Date.now() - startInitializingMoment) + " ms.");
-    //console.log(allTimetables);
+    console.log(allTimetables);
 }
 
 
