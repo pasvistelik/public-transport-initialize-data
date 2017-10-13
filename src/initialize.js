@@ -106,7 +106,7 @@ function binaryFind(array, predicateForArrayItem)
     let i = 0, j = array.length, k, predicateResult, currentItem; 
                                  
     while (i < j){
-        k = Math.floor((i+j)/2);
+        k = ~~((i+j)/2);
         currentItem = array[k];
         predicateResult = predicateForArrayItem(currentItem, k, array);
 
@@ -123,7 +123,6 @@ function initialize(allStations, allRoutes, allTimetables) {
 
     function bindRoutesStationsTimetables(station, tmpArr, tabArr, rrr) {
         if (station.routes == null) station.routes = [];
-        //console.log(station.routes);//!!!
         if (!(station.routes.includes(rrr))) station.routes.push(rrr);
         tmpArr.push(station);
 
@@ -157,13 +156,6 @@ function initialize(allStations, allRoutes, allTimetables) {
     }
     allStations = newAllStations;
 
-    /*for(let i = 1, n = allStations.length; i < n; i++){
-        if(allStations[i-1].hashcode > allStations[i].hashcode) console.log(allStations[i-1].hashcode + " > " + allStations[i].hashcode);
-    }*/
-
-    //var startInitializingMoment2 = Date.now();
-
-
     for (let i = 0, n = allRoutes.length, currentRoute = allRoutes[0]; i < n; currentRoute = allRoutes[++i]) {
 
         currentRoute.getNextStation = getNextStation; 
@@ -188,14 +180,6 @@ function initialize(allStations, allRoutes, allTimetables) {
                 if (currentRouteStationsCodes[index] == null || currentRouteStationsCodes[index].length === 0) continue;
                 for (let j = 0, m = currentRouteStationsCodes[index].length, stationCode = currentRouteStationsCodes[index][0]; j < m; stationCode = currentRouteStationsCodes[index][++j]) {
                     
-                    /*for (let k = 0, mn = allStations.length, station = allStations[0]; k < mn; station = allStations[++k]) {
-                        if (station != null && station.hashcode === stationCode) {
-                            bindRoutesStationsTimetables(station, tmpArr, tabArr, currentRoute);
-                            console.log("ok");
-                            break;
-                        }
-                    }*/
-
                     let findedStation = binaryFind(allStations, function(element, index, array){
                         if (element.hashcode === stationCode) return 0;
                         else if (element.hashcode > stationCode) return 1;
@@ -205,16 +189,6 @@ function initialize(allStations, allRoutes, allTimetables) {
                         bindRoutesStationsTimetables(findedStation, tmpArr, tabArr, currentRoute);
                     }
                     //else console.log("findedStation == null");
-
-                     
-                    /*for (let a = 0, b = allStations.length, k = Math.floor(b/2), currentItem = allStations[k]; a < b; currentItem = allStations[k = Math.floor((a+b)/2)]){
-                        if (currentItem.hashcode === stationCode){
-                            bindRoutesStationsTimetables(currentItem, tmpArr, tabArr, currentRoute);
-                            break;
-                        }
-                        else if (currentItem.hashcode > stationCode) b = k;
-                        else a = k+1;
-                    }*/
 
                 }
                 currentRoute.stations[index] = tmpArr;
@@ -227,8 +201,6 @@ function initialize(allStations, allRoutes, allTimetables) {
             continue;
         }
     }
-    
-    //console.log("Time = " + (Date.now() - startInitializingMoment2) + " ms.");
 
     for (let i = 0, n = allTimetables.length, timetable = allTimetables[0]; i < n; timetable = allTimetables[++i]) {
         timetable.findTimeAfter = findTimeAfter;
