@@ -58,7 +58,7 @@ function findTimeAfter(time, dayToday) {
     var findingTimeAfterFunc = getFindingTimeAfterFunc(time);
 
     for (let kkk = 0, mnkk = this.table.length, t = this.table[0]; kkk < mnkk; t = this.table[++kkk]) {
-        if (t.days.includes(day)) {
+        if (t.days[day]) {//.includes(day)
             
             let findedTime = binaryFind(t.times, findingTimeAfterFunc);
             if (findedTime != null) return findedTime - time;
@@ -98,7 +98,7 @@ function findTimeBefore(time, dayToday) {
     var findingTimeBeforeFunc = getFindingTimeBeforeFunc(time);
 
     for (let kkk = 0, mnkk = this.table.length, t = this.table[0], ok = false, st; kkk < mnkk; t = this.table[++kkk]) {
-        if (t.days.includes(day)) {
+        if (t.days[day]) {//.includes(day)
 
             let findedTime = binaryFind(t.times, findingTimeBeforeFunc);
             if (findedTime != null) return findedTime - time;
