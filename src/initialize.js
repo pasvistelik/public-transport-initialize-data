@@ -36,6 +36,16 @@ function getTimetable(station) {
     }
     return null;
 }
+function getFindingTimeAfterFunc(time) {
+    return function(element, index, array){
+        let previous = array[index - 1];
+        if (element >= time){
+            if (previous == null || previous < time) return 0;
+            return 1;
+        }
+        return -1;
+    }
+}
 function findTimeAfter(time, dayToday) {
     /*var dateTmp = new Date();!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     dateTmp.setMinutes(0);
@@ -45,17 +55,12 @@ function findTimeAfter(time, dayToday) {
     //var day = (new Date()).getDay();
     var day = (dayToday + ~~(time/86400))%7;
     
+    var findingTimeAfterFunc = getFindingTimeAfterFunc(time);
+
     for (let kkk = 0, mnkk = this.table.length, t = this.table[0]; kkk < mnkk; t = this.table[++kkk]) {
         if (t.days.includes(day)) {
             
-            let findedTime = binaryFind(t.times, function(element, index, array){
-                let previous = array[index - 1];
-                if (element >= time){
-                    if (previous == null || previous < time) return 0;
-                    return 1;
-                }
-                return -1;
-            });
+            let findedTime = binaryFind(t.times, findingTimeAfterFunc);
             if (findedTime != null) return findedTime - time;
 
             /*do {
@@ -71,6 +76,16 @@ function findTimeAfter(time, dayToday) {
     }
     return 2160000000;
 }
+function getFindingTimeBeforeFunc(time) {
+    return function(element, index, array){
+        let next = array[index + 1];
+        if (element <= time){
+            if  (next == null || next > time) return 0;
+            return -1;
+        }
+        return 1;
+    }
+}
 function findTimeBefore(time, dayToday) {
     /*var dateTmp = new Date();!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     dateTmp.setMinutes(0);
@@ -80,17 +95,12 @@ function findTimeBefore(time, dayToday) {
     //var day = (new Date()).getDay();
     var day = (dayToday + ~~(time/86400))%7;
 
+    var findingTimeBeforeFunc = getFindingTimeBeforeFunc(time);
+
     for (let kkk = 0, mnkk = this.table.length, t = this.table[0], ok = false, st; kkk < mnkk; t = this.table[++kkk]) {
         if (t.days.includes(day)) {
 
-            let findedTime = binaryFind(t.times, function(element, index, array){
-                let next = array[index + 1];
-                if (element <= time){
-                    if  (next == null || next > time) return 0;
-                    return -1;
-                }
-                return 1;
-            });
+            let findedTime = binaryFind(t.times, findingTimeBeforeFunc);
             if (findedTime != null) return findedTime - time;
 
             //TODO: Здесь следует перейти к расписанию предыдущего дня и искать там.
@@ -121,18 +131,8 @@ function initialize(allStations, allRoutes, allTimetables) {
     console.log("Start initializing...");
     var startInitializingMoment = Date.now();
 
-    function bindRoutesStationsTimetables(station, tmpArr, tabArr, rrr) {
-        if (station.routes == null) station.routes = [];
-        if (!(station.routes.includes(rrr))) station.routes.push(rrr);
-        tmpArr.push(station);
-
-        var stationCode = station.hashcode, routeCode = rrr.hashcode;
-
-        /*var tmp = allTimetables.find(function (element, index, array) {
-            return element.stationCode === stationCode && element.routeCode === routeCode;
-        });*/
-
-        var tmp = binaryFind(allTimetables, function(element, index, array){
+    function getFindingTimetableFunc(stationCode, routeCode) {
+        return function(element, index, array){
             if (element.stationCode > stationCode) return 1;
             else if (element.stationCode === stationCode){
                 if (element.routeCode === routeCode) return 0;
@@ -140,11 +140,34 @@ function initialize(allStations, allRoutes, allTimetables) {
                 return -1;
             }
             return -1;
-        });
+        }
+    }
+
+    function bindRoutesStationsTimetables(station, tmpArr, tabArr, rrr) {
+        if (station.routes == null) station.routes = [];
+        if (!(station.routes.includes(rrr))) station.routes.push(rrr);
+        tmpArr.push(station);
+
+        var stationCode = station.hashcode, routeCode = rrr.hashcode;
+        var findingTimetableFunc = getFindingTimetableFunc(stationCode, routeCode);
+
+        /*var tmp = allTimetables.find(function (element, index, array) {
+            return element.stationCode === stationCode && element.routeCode === routeCode;
+        });*/
+
+        var tmp = binaryFind(allTimetables, findingTimetableFunc);
 
         var tmpTab = (tmp == null) ? null : tmp;
 
         tabArr.push(tmpTab);
+    }
+
+    function getFindingStationFunc(stationCode) {
+        return function(element, index, array){
+            if (element.hashcode === stationCode) return 0;
+            else if (element.hashcode > stationCode) return 1;
+            else return -1;
+        }
     }
 
     // Удаляем станции, через которые не идет ни один маршрут
@@ -178,13 +201,9 @@ function initialize(allStations, allRoutes, allTimetables) {
             for (let index = 0, tmpArr = [], tabArr = [] ; index <= 1; index++) {
                 
                 if (currentRouteStationsCodes[index] == null || currentRouteStationsCodes[index].length === 0) continue;
-                for (let j = 0, m = currentRouteStationsCodes[index].length, stationCode = currentRouteStationsCodes[index][0]; j < m; stationCode = currentRouteStationsCodes[index][++j]) {
+                for (let j = 0, m = currentRouteStationsCodes[index].length, stationCode = currentRouteStationsCodes[index][0], findingStationFunc = getFindingStationFunc(stationCode); j < m; stationCode = currentRouteStationsCodes[index][++j], findingStationFunc = getFindingStationFunc(stationCode)) {
                     
-                    let findedStation = binaryFind(allStations, function(element, index, array){
-                        if (element.hashcode === stationCode) return 0;
-                        else if (element.hashcode > stationCode) return 1;
-                        else return -1;
-                    });
+                    let findedStation = binaryFind(allStations, findingStationFunc);
                     if (findedStation != null) {
                         bindRoutesStationsTimetables(findedStation, tmpArr, tabArr, currentRoute);
                     }
@@ -208,7 +227,6 @@ function initialize(allStations, allRoutes, allTimetables) {
     }
 
     console.log("Initialized. Time = " + (Date.now() - startInitializingMoment) + " ms.");
-    console.log(allTimetables);
 }
 
 
