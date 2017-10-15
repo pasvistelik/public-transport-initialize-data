@@ -171,13 +171,13 @@ function initialize(allStations, allRoutes, allTimetables) {
     }
 
     // Удаляем станции, через которые не идет ни один маршрут
-    let newAllStations = [];
+    /*let newAllStations = [];
     for (let i = 0, n = allStations.length, currentStation = allStations[0]; i < n; currentStation = allStations[++i]) {
         if (currentStation.routesCodes != null && currentStation.routesCodes.length !== 0) {
             newAllStations.push(currentStation);
         }
     }
-    allStations = newAllStations;
+    allStations = newAllStations;*/
 
     for (let i = 0, n = allRoutes.length, currentRoute = allRoutes[0]; i < n; currentRoute = allRoutes[++i]) {
 
