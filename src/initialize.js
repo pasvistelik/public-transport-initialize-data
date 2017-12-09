@@ -177,7 +177,8 @@ function initialize(allStations, allRoutes, allTimetables) {
     allStations = newAllStations;*/
 
     for (let i = 0, n = allStations.length, currentStation = allStations[0]; i < n; currentStation = allStations[++i]) {
-        currentStation.distance_to = [];
+        currentStation.distance_to = new Array(n).fill(0); //[];
+        currentStation.local_id = i;
     }
 
     for (let i = 0, n = allRoutes.length, currentRoute = allRoutes[0]; i < n; currentRoute = allRoutes[++i]) {
